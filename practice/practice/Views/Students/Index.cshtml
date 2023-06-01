@@ -1,0 +1,61 @@
+﻿@model List<Class>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+	@foreach (var item in Model)
+	{
+		<a onclick="getStudents(@item.ClassID)" class="btn btn-secondary" href="#" >@item.ClassName</a>
+	}
+
+</p>
+
+<table class="table" id="studentTable">
+	<thead>
+		<tr>
+			<th>
+				StudentName
+			</th>
+			<th>
+				StudentSurname
+			</th>
+			<th>
+				StudentAddress
+			</th>
+			<th>
+				ClassName
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+@section Scripts{
+	<script>
+		function getStudents(classID) {
+			$("#studentTable>tbody").html("");
+			let url = '@Url.Action("GetStudents","Students")';
+			$.get(url,{classID:classID}, function (students) {
+				for (const student of students) {
+					$("#studentTable>tbody").append(`
+								<tr>
+									<td>${student.StudentName}</td>
+									<td>${student.StudentSurname}</td>
+									<td>${student.StudentAddress}</td>
+									<td>${student.Class.ClassName}</td>
+								</tr>
+					`);
+				}
+			});
+		}
+		$(document).ready(function () { getStudents(); });
+
+	</script>
+}
